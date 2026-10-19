@@ -1,29 +1,98 @@
 
-.caja {
-    display: flex;
-    justify-content: space-between;
-    gap: 40px;
-    margin: 20px auto;
-    max-width: 800px;
+/* Estilos de la pantalla inicial, que reúne registro e inicio de sesión. */
+:root {
+    font-family: Arial, sans-serif;
+    color: #252525;
+    background: #f3f4f6;
 }
 
-
-.contorno, .inicio {
-    width: 48%;
+* {
+    box-sizing: border-box;
 }
 
-
-.grupo1, .grupo2, .grupo3, .grupo4, .grupo5 {
-    margin-bottom: 12px;
+body {
+    margin: 0;
+    padding: 32px 18px;
 }
 
+.pagina {
+    width: min(100%, 980px);
+    margin: 0 auto;
+}
+
+.marca {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.marca h1 {
+    margin-bottom: 8px;
+}
+
+.columnas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.panel {
+    padding: 24px;
+    border: 1px solid #d2d5da;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.panel h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.panel form,
+.formulario {
+    display: grid;
+    gap: 10px;
+}
 
 label {
-    display: inline-block;
-    width: 130px;
+    font-weight: 600;
 }
 
+input,
+textarea,
 button {
-    margin-top: 10px;
+    font: inherit;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #aeb4bd;
+    border-radius: 4px;
+}
+
+button,
+.boton {
+    display: inline-block;
+    width: fit-content;
+    margin-top: 8px;
+    padding: 9px 14px;
+    border: 1px solid #174e88;
+    border-radius: 5px;
+    color: #fff;
+    background: #1768ad;
+    text-decoration: none;
     cursor: pointer;
+}
+
+.mensaje {
+    padding: 10px 12px;
+    border-left: 4px solid #b0443c;
+    background: #fff0ee;
+}
+
+@media (max-width: 650px) {
+    .columnas {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,58 +1,43 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+/* Estilos del bloque parcial con la lista y los botones de inscripción. */
+.lista-viajeros {
+    margin-top: 24px;
+    padding: 14px 16px;
+    border: 1px solid #9da2a9;
+    background: #ededed;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
+.lista-viajeros h3 {
+    margin: 0 0 8px;
+}
+
+.lista-viajeros ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+}
+
+.lista-viajeros li {
+    margin: 4px 0;
+}
+
+.lista-viajeros form {
+    margin: 8px 0 0;
+}
+
+.lista-viajeros button {
+    padding: 7px 12px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #222;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
 }
 
-.nav-links {
-    text-align: right;
-    margin-bottom: 20px;
+.lista-viajeros .boton-secundario {
+    border-color: #555;
 }
 
-.nav-links a {
-    color: #0066cc;
-    text-decoration: none;
-    margin-left: 15px;
-    font-weight: bold;
-}
-
-.card {
-    border: 2px solid #000;
-    padding: 25px;
-    background-color: #fff;
-}
-
-.card h1 {
-    margin-top: 0;
-    font-size: 28px;
-}
-
-.info-group {
-    margin-bottom: 12px;
-    display: flex;
-}
-
-.info-label {
-    font-weight: bold;
-    width: 120px;
-    flex-shrink: 0;
-}
-
-.info-value {
-    flex-grow: 1;
-}
-
-.sinopsis {
-    margin-top: 15px;
-    line-height: 1.5;
-    text-align: justify;
+.nota-organizador {
+    margin-bottom: 0;
+    color: #555;
 }

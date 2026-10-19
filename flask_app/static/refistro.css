@@ -1,25 +1,126 @@
-/* Espaciado general de la página */
+/* Presentación de la lista de viajes y sus acciones principales. */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 28px 18px;
+    color: #252525;
+    background: #f3f4f6;
+    font-family: Arial, sans-serif;
 }
 
-/* Separa un poco los enlaces del encabezado */
-a {
-    margin-right: 10px;
+.pagina {
+    width: min(100%, 1100px);
+    margin: 0 auto;
 }
 
-/* Ancho y alineación simple para la tabla */
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.encabezado h1 {
+    margin: 4px 0;
+}
+
+.saludo {
+    margin: 0;
+    color: #555;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.boton,
+button {
+    display: inline-block;
+    padding: 9px 13px;
+    border: 1px solid #174e88;
+    border-radius: 5px;
+    color: #fff;
+    background: #1768ad;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.boton-secundario {
+    border-color: #747b84;
+    color: #252525;
+    background: #fff;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    border: 1px solid #c8cbd0;
+    border-radius: 6px;
+    background: #fff;
+}
+
 table {
     width: 100%;
-    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #d6d8dc;
+    text-align: left;
+    white-space: nowrap;
 }
 
 th {
-    background-color: #f0f0f0;
+    background: #e7e9ec;
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
+tbody tr:nth-child(even) {
+    background: #f7f7f7;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.acciones form {
+    margin: 0;
+}
+
+.enlace-boton {
+    padding: 0;
+    border: 0;
+    color: #075ba6;
+    background: transparent;
+    text-decoration: underline;
+}
+
+.vacio {
+    padding: 28px;
+    border: 1px solid #d2d5da;
+    border-radius: 6px;
+    background: #fff;
+    text-align: center;
+}
+
+.mensaje {
+    padding: 10px 12px;
+    border-left: 4px solid #b0443c;
+    background: #fff0ee;
+}
+
+@media (max-width: 650px) {
+    .encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }

@@ -44,7 +44,8 @@ class User:
     def get_by_email(cls, data):
         """Busca una cuenta por correo para registro e inicio de sesión."""
         query = "SELECT * FROM usuarios WHERE email = %(email)s;"
-        results = connectToMySQL(cls.db).query_db(query, data)
+        email = data.get("email", "").strip().lower()
+        results = connectToMySQL(cls.db).query_db(query, {"email": email})
         if not results:
             return None
         return cls(results[0])
@@ -59,20 +60,26 @@ class User:
         conf_password = data.get("conf_password", "")
 
         email_pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
-        if len(nombre) < 2 or len(apellido) < 2:
+        if not 2 <= len(nombre) <= 45 or not 2 <= len(apellido) <= 45:
             return False
         if not re.fullmatch(email_pattern, email) or len(email) > 254:
             return False
-        if not password or password != conf_password:
+        if (
+            not password
+            or len(password.encode("utf-8")) > 72
+            or password != conf_password
+        ):
             return False
-        if cls.get_by_email({"email": email}):
+        if cls.get_by_email({"email": email.lower()}):
             return False
         return True
 
     @classmethod
     def validate_login(cls, data):
         """Devuelve la cuenta asociada al correo o indica que no existe."""
-        user = cls.get_by_email({"email": data.get("email", "").strip()})
+        user = cls.get_by_email(
+            {"email": data.get("email", "").strip().lower()}
+        )
         if not user:
             return False, None
         return True, user

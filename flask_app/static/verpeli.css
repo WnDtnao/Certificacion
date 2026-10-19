@@ -1,71 +1,110 @@
 
+/* Distribución de la vista con los datos y las fechas del viaje. */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 28px 18px;
+    color: #252525;
+    background: #f3f4f6;
+    font-family: Arial, sans-serif;
 }
 
+.pagina {
+    width: min(100%, 900px);
+    margin: 0 auto;
+}
 
-.caja, .encabezado {
+.encabezado {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 24px;
 }
 
-
-.contorno, .inicio {
-    width: 45%;
+.encabezado h1 {
+    margin: 0;
 }
 
-
-.grupo, .grupo1, .grupo2, .grupo3, .grupo4, .grupo5 {
-    margin-bottom: 10px;
+nav {
+    display: flex;
+    gap: 8px;
 }
 
-
-label {
-    display: inline-block;
-    width: 130px;
-    vertical-align: top;
-}
-
-
-input, textarea {
-    width: 200px;
-}
-
-
-table {
-    width: 100%;
-    margin-top: 15px;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f0f0f0;
-}
-
-
-.caja-detalle {
-    border: 1px solid black;
-    padding: 10px;
-    margin-top: 15px;
-}
-
-
-.error {
-    color: red;
-}
-
-
+.boton,
 button {
-    margin-top: 10px;
+    display: inline-block;
+    padding: 9px 13px;
+    border: 1px solid #174e88;
+    border-radius: 5px;
+    color: #fff;
+    background: #1768ad;
+    font: inherit;
+    text-decoration: none;
     cursor: pointer;
 }
 
-a {
-    margin-left: 10px;
+.boton-secundario {
+    border-color: #747b84;
+    color: #252525;
+    background: #fff;
+}
+
+.tarjeta-viaje {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px;
+    border: 1px solid #747b84;
+    background: #fff;
+}
+
+.tarjeta-viaje h2 {
+    margin-top: 0;
+    font-size: 1.7rem;
+}
+
+.datos-viaje {
+    display: grid;
+    grid-template-columns: minmax(120px, 150px) 1fr;
+    gap: 9px 14px;
+    margin: 0;
+}
+
+.datos-viaje dt {
+    font-weight: 700;
+}
+
+.datos-viaje dd {
+    margin: 0;
+}
+
+.itinerario {
+    min-height: 64px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.mensaje {
+    padding: 10px 12px;
+    border-left: 4px solid #b0443c;
+    background: #fff0ee;
+}
+
+@media (max-width: 600px) {
+    .encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .datos-viaje {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .datos-viaje dd {
+        margin-bottom: 10px;
+    }
 }

@@ -2,26 +2,51 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>CinePedia - Ver Película</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajero Frecuente | {{ viaje.destino }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='verpeli.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='comentario.css') }}">
 </head>
 <body>
+    <main class="pagina detalle-pagina">
+        <header class="encabezado">
+            <h1>Ver Viaje</h1>
+            <nav aria-label="Navegación principal">
+                <a class="boton boton-secundario" href="{{ url_for('dashboard') }}">Inicio</a>
+                <a class="boton boton-secundario" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            </nav>
+        </header>
 
-    <!-- Enlaces superiores simples -->
-    <p>
-        <a href="/cine">Inicio</a>
-        <a href="/cierre">Cerrar Sesión</a>
-    </p>
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="mensajes" role="status">
+                    {% for categoria, mensaje in mensajes %}
+                        <p class="mensaje {{ categoria }}">{{ mensaje }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <!-- Caja con borde simple que contiene la información -->
-    <div class="caja-detalle">
-        <h1>{{ pelicula.titulo }}</h1>
-        
-        <p>Publicado por: {{ pelicula.creador }}</p>
-        <p>Director: {{ pelicula.director }}</p>
-        <p>Fecha: {{ pelicula.fecha_estreno }}</p>
-        <p>Sinopsis: {{ pelicula.sinopsis }}</p>
-    </div>
+        <!-- El controlador combina los datos del viaje con la lista de viajeros. -->
+        <article class="tarjeta-viaje">
+            <h2>{{ viaje.destino }}</h2>
+            <dl class="datos-viaje">
+                <dt>Organizador:</dt>
+                <dd>{{ viaje.organizador }}</dd>
 
+                <dt>Fecha Inicio:</dt>
+                <dd>{{ viaje.fecha_inicio.strftime('%Y-%m-%d') }}</dd>
+
+                <dt>Fecha Fin:</dt>
+                <dd>{{ viaje.fecha_fin.strftime('%Y-%m-%d') }}</dd>
+
+                <dt>Itinerario</dt>
+                <dd class="itinerario">{{ viaje.itinerario }}</dd>
+            </dl>
+
+            <!-- Este parcial muestra participantes y el botón correspondiente a la sesión. -->
+            {% include "comentario.html" %}
+        </article>
+    </main>
 </body>
 </html>

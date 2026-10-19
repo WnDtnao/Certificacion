@@ -1,5 +1,7 @@
 """Rutas para crear, consultar, editar y borrar viajes."""
 
+from datetime import date
+
 from flask import abort, flash, redirect, render_template, request, session, url_for
 
 from flask_app import app
@@ -30,7 +32,7 @@ def nuevo_viaje():
     """Abre el formulario de creación para una persona autenticada."""
     if "user_id" not in session:
         return redirect(url_for("index"))
-    return render_template("nuevapeli.html")
+    return render_template("nuevapeli.html", hoy=date.today().isoformat())
 
 
 @app.route("/crear", methods=["POST"])
@@ -94,7 +96,9 @@ def editar_viaje(trip_id):
         flash("Solo la persona organizadora puede editar este viaje.", "viaje")
         return redirect(url_for("dashboard"))
 
-    return render_template("editarpeli.html", viaje=trip)
+    return render_template(
+        "editarpeli.html", viaje=trip, hoy=date.today().isoformat()
+    )
 
 
 @app.route("/actualizar/<int:trip_id>", methods=["POST"])

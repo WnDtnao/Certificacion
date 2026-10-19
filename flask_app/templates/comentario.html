@@ -1,46 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Peli - {{ pelicula.titulo }}</title>
-    <!-- Vinculación del archivo CSS externo mediante Flask -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/comentario.css') }}">
-</head>
-<body>
+<!-- Parcial incluido en el detalle: lista las inscripciones y permite gestionarlas. -->
+<section class="lista-viajeros" aria-labelledby="titulo-viajeros">
+    <h3 id="titulo-viajeros">Viajeros</h3>
+    {% if viajeros %}
+        <ul>
+            {% for viajero in viajeros %}
+                <li>{{ viajero.nombre }} {{ viajero.apellido }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aún no hay viajeros inscritos.</p>
+    {% endif %}
 
-    <div class="container">
-
-        <div class="nav-links">
-            <a href="/inicio">Inicio</a>
-            <a href="/logout">Cerrar Sesión</a>
-        </div>
-
-
-        <div class="card">
-            <h1>{{ pelicula.titulo }}</h1>
-
-            <div class="info-group">
-                <span class="info-label">Publicado por:</span>
-                <span class="info-value">{{ pelicula.publicado_por }}</span>
-            </div>
-
-            <div class="info-group">
-                <span class="info-label">Director</span>
-                <span class="info-value">{{ pelicula.director }}</span>
-            </div>
-
-            <div class="info-group">
-                <span class="info-label">Fecha:</span>
-                <span class="info-value">{{ pelicula.fecha }}</span>
-            </div>
-
-            <div class="info-group sinopsis">
-                <span class="info-label">Sinopsis:</span>
-                <span class="info-value">{{ pelicula.sinopsis }}</span>
-            </div>
-        </div>
-    </div>
-
-</body>
-</html>
+    {% if viaje.organizador_id == session.get('user_id') %}
+        <p class="nota-organizador">Este viaje está organizado por ti.</p>
+    {% elif ya_inscrito %}
+        <!-- La baja solo elimina la inscripción del usuario conectado. -->
+        <form action="{{ url_for('cancelar_viaje', trip_id=viaje.id) }}" method="POST">
+            <button class="boton boton-secundario" type="submit">Cancelar</button>
+        </form>
+    {% else %}
+        <!-- La ruta verifica que el viaje siga abierto y registra al usuario actual. -->
+        <form action="{{ url_for('unirme_viaje', trip_id=viaje.id) }}" method="POST">
+            <button type="submit">Unirme</button>
+        </form>
+    {% endif %}
+</section>
