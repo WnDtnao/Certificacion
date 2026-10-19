@@ -2,41 +2,67 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Película</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajero Frecuente | Editar Viaje</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='editar.css') }}">
 </head>
 <body>
+    <main class="pagina formulario-pagina">
+        <header class="encabezado">
+            <h1>Editar Viaje</h1>
+            <nav aria-label="Navegación principal">
+                <a class="boton boton-secundario" href="{{ url_for('dashboard') }}">Inicio</a>
+                <a class="boton boton-secundario" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            </nav>
+        </header>
 
-    <h1>Editar Película</h1>
-    <a href="/cine">Inicio</a> | <a href="/cierre">Cerrar Sesión</a>
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="mensajes" role="status">
+                    {% for categoria, mensaje in mensajes %}
+                        <p class="mensaje {{ categoria }}">{{ mensaje }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <br><br>
+        <!-- El controlador comprueba la propiedad antes de mostrar este formulario. -->
+        <form class="formulario"
+              action="{{ url_for('actualizar_viaje', trip_id=viaje.id) }}"
+              method="POST">
+            <label for="destino">Destino</label>
+            <input id="destino" name="destino" type="text" maxlength="120"
+                   value="{{ viaje.destino }}" required>
 
+            <label for="fecha-inicio">Fecha de Inicio</label>
+            <input id="fecha-inicio" name="fecha_inicio" type="date"
+                   min="{{ hoy }}" value="{{ viaje.fecha_inicio.strftime('%Y-%m-%d') }}"
+                   required>
 
+            <label for="fecha-fin">Fecha de Fin</label>
+            <input id="fecha-fin" name="fecha_fin" type="date"
+                   min="{{ hoy }}" value="{{ viaje.fecha_fin.strftime('%Y-%m-%d') }}"
+                   required>
 
-    <form action="/cine/actualizar/{{ pelicula.id }}" method="POST">
-        <p>
-            <label>Nombre de Peli:</label>
-            <input type="text" name="titulo" value="{{ pelicula.titulo }}" required>
-        </p>
+            <label for="itinerario">Itinerario <span>(máximo 40 caracteres)</span></label>
+            <textarea id="itinerario" name="itinerario" maxlength="40"
+                      rows="5" required>{{ viaje.itinerario }}</textarea>
 
-        <p>
-            <label>Director:</label>
-            <input type="text" name="director" value="{{ pelicula.director }}" required>
-        </p>
+            <button type="submit">Guardar</button>
+        </form>
+    </main>
 
-        <p>
-            <label>Fecha Estreno:</label>
-            <input type="date" name="fecha_estreno" value="{{ pelicula.fecha_estreno }}" required>
-        </p>
-
-        <p>
-            <label>Sinopsis:</label>
-            <textarea name="sinopsis" required>{{ pelicula.sinopsis }}</textarea>
-        </p>
-
-        <button type="submit">Guardar Película</button>
-    </form>
-
+    <!-- Se mantiene la fecha final igual o posterior a la fecha de inicio. -->
+    <script>
+        const fechaInicio = document.getElementById("fecha-inicio");
+        const fechaFin = document.getElementById("fecha-fin");
+        fechaFin.min = fechaInicio.value;
+        fechaInicio.addEventListener("change", () => {
+            fechaFin.min = fechaInicio.value || "{{ hoy }}";
+            if (fechaFin.value && fechaFin.value < fechaInicio.value) {
+                fechaFin.value = fechaInicio.value;
+            }
+        });
+    </script>
 </body>
 </html>

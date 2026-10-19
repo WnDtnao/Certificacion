@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajero Frecuente | Nuevo Viaje</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='nuevo.css') }}">
+</head>
+<body>
+    <main class="pagina formulario-pagina">
+        <header class="encabezado">
+            <h1>Nuevo Viaje</h1>
+            <nav aria-label="Navegación principal">
+                <a class="boton boton-secundario" href="{{ url_for('dashboard') }}">Inicio</a>
+                <a class="boton boton-secundario" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            </nav>
+        </header>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="mensajes" role="status">
+                    {% for categoria, mensaje in mensajes %}
+                        <p class="mensaje {{ categoria }}">{{ mensaje }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- El controlador toma el organizador desde la sesión, no del formulario. -->
+        <form class="formulario" action="{{ url_for('crear_viaje') }}" method="POST">
+            <label for="destino">Destino</label>
+            <input id="destino" name="destino" type="text" maxlength="120" required>
+
+            <label for="fecha-inicio">Fecha de Inicio</label>
+            <input id="fecha-inicio" name="fecha_inicio" type="date"
+                   min="{{ hoy }}" required>
+
+            <label for="fecha-fin">Fecha de Fin</label>
+            <input id="fecha-fin" name="fecha_fin" type="date"
+                   min="{{ hoy }}" required>
+
+            <label for="itinerario">Itinerario <span>(máximo 40 caracteres)</span></label>
+            <textarea id="itinerario" name="itinerario" maxlength="40"
+                      rows="5" required></textarea>
+
+            <button type="submit">Guardar</button>
+        </form>
+    </main>
+
+    <!-- El navegador evita fechas anteriores al inicio; el servidor vuelve a validarlas. -->
+    <script>
+        const fechaInicio = document.getElementById("fecha-inicio");
+        const fechaFin = document.getElementById("fecha-fin");
+        fechaInicio.addEventListener("change", () => {
+            fechaFin.min = fechaInicio.value || "{{ hoy }}";
+            if (fechaFin.value && fechaFin.value < fechaInicio.value) {
+                fechaFin.value = fechaInicio.value;
+            }
+        });
+    </script>
+</body>
+</html>
