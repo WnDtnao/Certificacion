@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Peli - {{ pelicula.titulo }}</title>
+    <!-- Vinculación del archivo CSS externo mediante Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comentario.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="nav-links">
+            <a href="/inicio">Inicio</a>
+            <a href="/logout">Cerrar Sesión</a>
+        </div>
+
+
+        <div class="card">
+            <h1>{{ pelicula.titulo }}</h1>
+
+            <div class="info-group">
+                <span class="info-label">Publicado por:</span>
+                <span class="info-value">{{ pelicula.publicado_por }}</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Director</span>
+                <span class="info-value">{{ pelicula.director }}</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Fecha:</span>
+                <span class="info-value">{{ pelicula.fecha }}</span>
+            </div>
+
+            <div class="info-group sinopsis">
+                <span class="info-label">Sinopsis:</span>
+                <span class="info-value">{{ pelicula.sinopsis }}</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

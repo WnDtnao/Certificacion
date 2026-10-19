@@ -1,0 +1,71 @@
+
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+
+.caja, .encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.contorno, .inicio {
+    width: 45%;
+}
+
+
+.grupo, .grupo1, .grupo2, .grupo3, .grupo4, .grupo5 {
+    margin-bottom: 10px;
+}
+
+
+label {
+    display: inline-block;
+    width: 130px;
+    vertical-align: top;
+}
+
+
+input, textarea {
+    width: 200px;
+}
+
+
+table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+
+.caja-detalle {
+    border: 1px solid black;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+
+.error {
+    color: red;
+}
+
+
+button {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+a {
+    margin-left: 10px;
+}

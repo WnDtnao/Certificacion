@@ -1,0 +1,57 @@
+/* Configuración básica de la página */
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+/* Pone elementos lado a lado (Registro e Inicio de Sesión) */
+.caja, .encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Ancho para las dos columnas de login/registro */
+.contorno, .inicio {
+    width: 45%;
+}
+
+/* Espacio entre cada campo del formulario */
+.grupo, .grupo1, .grupo2, .grupo3, .grupo4, .grupo5 {
+    margin-bottom: 10px;
+}
+
+/* Alineación limpia de los nombres de los campos */
+label {
+    display: inline-block;
+    width: 130px;
+    vertical-align: top;
+}
+
+/* Cajas de texto e input */
+input, textarea {
+    width: 200px;
+}
+
+/* Tabla del Dashboard */
+table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+
+
+/* Espaciado de botones y enlaces */
+button {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+a {
+    margin-left: 10px;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajero Frecuente | Acceso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='inicio.css') }}">
+</head>
+<body>
+    <main class="pagina acceso">
+        <header class="marca">
+            <h1>Viajero Frecuente</h1>
+            <p>Organiza un viaje y encuentra personas que quieran acompañarte.</p>
+        </header>
+
+        <!-- Los mensajes proceden de las validaciones del controlador de usuarios. -->
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="mensajes" role="status">
+                    {% for categoria, mensaje in mensajes %}
+                        <p class="mensaje {{ categoria }}">{{ mensaje }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="columnas">
+            <!-- Este formulario crea la cuenta y luego inicia la sesión. -->
+            <section class="panel">
+                <h2>Registro</h2>
+                <form action="{{ url_for('register') }}" method="POST">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" name="nombre" type="text" minlength="2"
+                           maxlength="45" autocomplete="given-name" required>
+
+                    <label for="apellido">Apellido</label>
+                    <input id="apellido" name="apellido" type="text" minlength="2"
+                           maxlength="45" autocomplete="family-name" required>
+
+                    <label for="email-registro">E-mail</label>
+                    <input id="email-registro" name="email" type="email"
+                           maxlength="254" autocomplete="email" required>
+
+                    <label for="password-registro">Contraseña</label>
+                    <input id="password-registro" name="password" type="password"
+                           autocomplete="new-password" required>
+
+                    <label for="conf-password">Conf. contraseña</label>
+                    <input id="conf-password" name="conf_password" type="password"
+                           autocomplete="new-password" required>
+
+                    <button type="submit">Registrar</button>
+                </form>
+            </section>
+
+            <!-- El controlador compara la contraseña con el hash guardado en MySQL. -->
+            <section class="panel">
+                <h2>Inicio de Sesión</h2>
+                <form action="{{ url_for('login') }}" method="POST">
+                    <label for="email-login">E-mail</label>
+                    <input id="email-login" name="email" type="email"
+                           autocomplete="username" required>
+
+                    <label for="password-login">Contraseña</label>
+                    <input id="password-login" name="password" type="password"
+                           autocomplete="current-password" required>
+
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

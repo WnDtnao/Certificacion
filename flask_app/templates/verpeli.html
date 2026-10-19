@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CinePedia - Ver Película</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='verpeli.css') }}">
+</head>
+<body>
+
+    <!-- Enlaces superiores simples -->
+    <p>
+        <a href="/cine">Inicio</a>
+        <a href="/cierre">Cerrar Sesión</a>
+    </p>
+
+    <!-- Caja con borde simple que contiene la información -->
+    <div class="caja-detalle">
+        <h1>{{ pelicula.titulo }}</h1>
+        
+        <p>Publicado por: {{ pelicula.creador }}</p>
+        <p>Director: {{ pelicula.director }}</p>
+        <p>Fecha: {{ pelicula.fecha_estreno }}</p>
+        <p>Sinopsis: {{ pelicula.sinopsis }}</p>
+    </div>
+
+</body>
+</html>
