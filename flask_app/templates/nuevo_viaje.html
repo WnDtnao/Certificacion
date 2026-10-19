@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Viaje</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <div class="contenedor angosto">
+        <div class="encabezado">
+            <h1>Nuevo Viaje</h1>
+            <div>
+                <a href="/dashboard" class="boton">Inicio</a>
+                <a href="/logout" class="boton">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        {% with mensajes = get_flashed_messages(category_filter=['viaje']) %}
+            {% for mensaje in mensajes %}
+                <p class="error">{{ mensaje }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form action="/crear" method="post">
+            <div class="campo">
+                <label for="destino">Destino</label>
+                <input type="text" id="destino" name="destino" value="{{ viaje.destino }}">
+            </div>
+            <div class="campo">
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ viaje.fecha_inicio }}">
+            </div>
+            <div class="campo">
+                <label for="fecha_fin">Fecha de Fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" value="{{ viaje.fecha_fin }}">
+            </div>
+            <div class="campo">
+                <label for="itinerario">Itinerario:</label>
+                <textarea id="itinerario" name="itinerario" rows="5">{{ viaje.itinerario }}</textarea>
+            </div>
+            <input type="submit" class="boton derecha" value="Guardar">
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Viaje</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <div class="contenedor angosto">
+        <div class="botones-arriba">
+            <a href="/dashboard" class="boton">Inicio</a>
+            <a href="/logout" class="boton">Cerrar Sesión</a>
+        </div>
+
+        <div class="caja">
+            <h1>{{ viaje.destino }}</h1>
+            <table class="detalle">
+                <tr>
+                    <td>Organizador:</td>
+                    <td>{{ viaje.organizador }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha Inicio:</td>
+                    <td>{{ viaje.fecha_inicio }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha Fin:</td>
+                    <td>{{ viaje.fecha_fin }}</td>
+                </tr>
+                <tr>
+                    <td>Itinerario</td>
+                    <td>{{ viaje.itinerario }}</td>
+                </tr>
+            </table>
+
+            <div class="viajeros">
+                <table class="tabla-viajeros">
+                    <thead>
+                        <tr><th>Viajeros</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for viajero in viajeros %}
+                        <tr><td>{{ viajero.nombre }} {{ viajero.apellido }}</td></tr>
+                        {% else %}
+                        <tr><td>Nadie se ha unido todavía</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if inscrito %}
+                    <form action="/cancelar/{{ viaje.id }}" method="post">
+                        <input type="submit" class="boton" value="Cancelar">
+                    </form>
+                {% else %}
+                    <form action="/unirme/{{ viaje.id }}" method="post">
+                        <input type="submit" class="boton" value="Unirme!">
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,130 +1,119 @@
-from datetime import date
-
-from flask import abort, flash, redirect, render_template, request, session, url_for
-
 from flask_app import app
-from flask_app.models.viajes import Trip
-from flask_app.models.usuarios import User
+from flask import render_template, request, redirect, session
+from flask_app.models.viaje import Viaje
 
-
-@app.route("/dashboard")
+@app.route('/dashboard')
 def dashboard():
-    if "user_id" not in session:
-        return redirect(url_for("index"))
+    if 'usuario_id' not in session:
+        return redirect('/')
+    return render_template('panel_viajes.html', viajes=Viaje.get_all())
 
-    user = User.get_by_id(session["user_id"])
-    if not user:
-        session.clear()
-        return redirect(url_for("index"))
+@app.route('/nuevo')
+def nuevo():
+    if 'usuario_id' not in session:
+        return redirect('/')
+    return render_template('nuevo_viaje.html', viaje={})
 
-    return render_template("dashboard.html", viajes=Trip.get_all())
+@app.route('/crear', methods=['POST'])
+def crear():
+    if 'usuario_id' not in session:
+        return redirect('/')
 
+    if not Viaje.validar_viaje(request.form):
+        # vuelvo a mostrar el form con lo que ya habia escrito
+        return render_template('nuevo_viaje.html', viaje=request.form)
 
-@app.route("/nuevo")
-def nuevo_viaje():
-    if "user_id" not in session:
-        return redirect(url_for("index"))
-    return render_template("nuevo.html", hoy=date.today().isoformat())
-
-
-@app.route("/crear", methods=["POST"])
-def crear_viaje():
-    if "user_id" not in session:
-        return redirect(url_for("index"))
-
-    data = {
-        "destino": request.form.get("destino", "").strip(),
-        "fecha_inicio": request.form.get("fecha_inicio", "").strip(),
-        "fecha_fin": request.form.get("fecha_fin", "").strip(),
-        "itinerario": request.form.get("itinerario", "").strip(),
-        "organizador_id": session["user_id"],
+    datos = {
+        'destino': request.form['destino'],
+        'fecha_inicio': request.form['fecha_inicio'],
+        'fecha_fin': request.form['fecha_fin'],
+        'itinerario': request.form['itinerario'],
+        'usuario_id': session['usuario_id']
     }
-    if not Trip.validate(data):
-        flash(
-            "Revisa el destino y el itinerario (máximo 40 caracteres). "
-            "El inicio no puede estar en el pasado y el fin debe ser "
-            "posterior al inicio.",
-            "viaje",
-        )
-        return redirect(url_for("nuevo_viaje"))
+    Viaje.save(datos)
+    return redirect('/dashboard')
 
-    if not Trip.save(data):
-        abort(500)
-    return redirect(url_for("dashboard"))
+@app.route('/ver/<int:id>')
+def ver(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
 
+    viaje = Viaje.get_one({'id': id})
+    if not viaje:
+        return redirect('/dashboard')
 
-@app.route("/ver/<int:trip_id>")
-def ver_viaje(trip_id):
-    if "user_id" not in session:
-        return redirect(url_for("index"))
+    viajeros = Viaje.get_viajeros({'id': id})
+    # reviso si el usuario ya esta en la lista para mostrar Unirme o Cancelar
+    inscrito = False
+    for viajero in viajeros:
+        if viajero['id'] == session['usuario_id']:
+            inscrito = True
 
-    trip = Trip.get_by_id(trip_id)
-    if not trip:
-        return redirect(url_for("dashboard"))
+    return render_template('ver_viaje.html', viaje=viaje, viajeros=viajeros, inscrito=inscrito)
 
-    return render_template(
-        "ver.html",
-        viaje=trip,
-        viajeros=Trip.get_travelers(trip_id),
-        ya_inscrito=Trip.is_traveler(trip_id, session["user_id"]),
-    )
+@app.route('/editar/<int:id>')
+def editar(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
 
+    viaje = Viaje.get_one({'id': id})
+    # solo el que creo el viaje lo puede editar
+    if not viaje or viaje.usuario_id != session['usuario_id']:
+        return redirect('/dashboard')
 
-@app.route("/editar/<int:trip_id>")
-def editar_viaje(trip_id):
-    if "user_id" not in session:
-        return redirect(url_for("index"))
+    return render_template('editar_viaje.html', viaje=viaje, id=id)
 
-    trip = Trip.get_by_id(trip_id)
-    if not trip:
-        return redirect(url_for("dashboard"))
-    # solo quien organizó el viaje puede editarlo
-    if trip.organizador_id != session["user_id"]:
-        flash("Solo la persona organizadora puede editar este viaje.", "viaje")
-        return redirect(url_for("dashboard"))
+@app.route('/actualizar/<int:id>', methods=['POST'])
+def actualizar(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
 
-    return render_template("editar.html", viaje=trip, hoy=date.today().isoformat())
+    viaje = Viaje.get_one({'id': id})
+    if not viaje or viaje.usuario_id != session['usuario_id']:
+        return redirect('/dashboard')
 
+    if not Viaje.validar_viaje(request.form):
+        return render_template('editar_viaje.html', viaje=request.form, id=id)
 
-@app.route("/actualizar/<int:trip_id>", methods=["POST"])
-def actualizar_viaje(trip_id):
-    if "user_id" not in session:
-        return redirect(url_for("index"))
-
-    trip = Trip.get_by_id(trip_id)
-    if not trip or trip.organizador_id != session["user_id"]:
-        return redirect(url_for("dashboard"))
-
-    data = {
-        "id": trip_id,
-        "destino": request.form.get("destino", "").strip(),
-        "fecha_inicio": request.form.get("fecha_inicio", "").strip(),
-        "fecha_fin": request.form.get("fecha_fin", "").strip(),
-        "itinerario": request.form.get("itinerario", "").strip(),
+    datos = {
+        'id': id,
+        'destino': request.form['destino'],
+        'fecha_inicio': request.form['fecha_inicio'],
+        'fecha_fin': request.form['fecha_fin'],
+        'itinerario': request.form['itinerario']
     }
-    if not Trip.validate(data):
-        flash(
-            "Revisa el destino y el itinerario (máximo 40 caracteres). "
-            "El inicio no puede estar en el pasado y el fin debe ser "
-            "posterior al inicio.",
-            "viaje",
-        )
-        return redirect(url_for("editar_viaje", trip_id=trip_id))
+    Viaje.update(datos)
+    return redirect('/dashboard')
 
-    if not Trip.update(data):
-        abort(500)
-    return redirect(url_for("dashboard"))
+@app.route('/borrar/<int:id>')
+def borrar(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
 
+    viaje = Viaje.get_one({'id': id})
+    if viaje and viaje.usuario_id == session['usuario_id']:
+        Viaje.delete({'id': id})
+    return redirect('/dashboard')
 
-@app.route("/borrar/<int:trip_id>", methods=["POST"])
-def borrar_viaje(trip_id):
-    if "user_id" not in session:
-        return redirect(url_for("index"))
+@app.route('/unirme/<int:id>', methods=['POST'])
+def unirme(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
 
-    trip = Trip.get_by_id(trip_id)
-    if not trip or trip.organizador_id != session["user_id"]:
-        return redirect(url_for("dashboard"))
+    datos = {'usuario_id': session['usuario_id'], 'viaje_id': id}
+    # para no insertar dos veces al mismo usuario (la bd no lo deja)
+    viajeros = Viaje.get_viajeros({'id': id})
+    for viajero in viajeros:
+        if viajero['id'] == session['usuario_id']:
+            return redirect(f'/ver/{id}')
 
-    if not Trip.delete(trip_id):
-        abort(500)
-    return redirect(url_for("dashboard"))
+    Viaje.unirse(datos)
+    return redirect(f'/ver/{id}')
+
+@app.route('/cancelar/<int:id>', methods=['POST'])
+def cancelar(id):
+    if 'usuario_id' not in session:
+        return redirect('/')
+
+    Viaje.cancelar({'usuario_id': session['usuario_id'], 'viaje_id': id})
+    return redirect(f'/ver/{id}')
