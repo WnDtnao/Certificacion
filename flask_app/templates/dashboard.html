@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viajero Frecuente | Viajes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='refistro.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
     <main class="pagina">
@@ -55,8 +55,7 @@
                                     {% if viaje.organizador_id == session.get('user_id') %}
                                         <a href="{{ url_for('editar_viaje', trip_id=viaje.id) }}">Editar</a>
                                         <form action="{{ url_for('borrar_viaje', trip_id=viaje.id) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('¿Quieres borrar este viaje?');">
+                                              method="POST">
                                             <button class="enlace-boton" type="submit">Borrar</button>
                                         </form>
                                     {% endif %}

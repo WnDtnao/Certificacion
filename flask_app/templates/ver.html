@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viajero Frecuente | {{ viaje.destino }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='verpeli.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='comentario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ver.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='viajeros.css') }}">
 </head>
 <body>
     <main class="pagina detalle-pagina">
@@ -45,7 +45,7 @@
             </dl>
 
             <!-- Este parcial muestra participantes y el botón correspondiente a la sesión. -->
-            {% include "comentario.html" %}
+            {% include "viajeros.html" %}
         </article>
     </main>
 </body>

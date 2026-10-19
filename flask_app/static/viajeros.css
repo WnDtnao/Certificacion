@@ -1,0 +1,23 @@
+/* Formato de la lista de viajeros en el detalle. */
+.lista-viajeros {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #888;
+    background: #eee;
+}
+
+.lista-viajeros h3 {
+    margin-top: 0;
+}
+
+.lista-viajeros li {
+    margin: 4px 0;
+}
+
+.lista-viajeros button {
+    margin-top: 5px;
+}
+
+.nota-organizador {
+    margin-bottom: 0;
+}

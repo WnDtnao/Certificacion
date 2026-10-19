@@ -51,18 +51,5 @@
             <button type="submit">Guardar</button>
         </form>
     </main>
-
-    <!-- Se mantiene la fecha final igual o posterior a la fecha de inicio. -->
-    <script>
-        const fechaInicio = document.getElementById("fecha-inicio");
-        const fechaFin = document.getElementById("fecha-fin");
-        fechaFin.min = fechaInicio.value;
-        fechaInicio.addEventListener("change", () => {
-            fechaFin.min = fechaInicio.value || "{{ hoy }}";
-            if (fechaFin.value && fechaFin.value < fechaInicio.value) {
-                fechaFin.value = fechaInicio.value;
-            }
-        });
-    </script>
 </body>
 </html>

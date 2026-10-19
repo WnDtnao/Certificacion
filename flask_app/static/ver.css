@@ -1,0 +1,76 @@
+/* Estilos de la vista de detalle del viaje. */
+body {
+    margin: 20px;
+    color: #222;
+    font-family: Arial, sans-serif;
+}
+
+.pagina {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+nav {
+    display: flex;
+    gap: 8px;
+}
+
+.boton,
+button {
+    padding: 5px 9px;
+    color: #222;
+    font: inherit;
+}
+
+.tarjeta-viaje {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 12px;
+    border: 1px solid #555;
+}
+
+.tarjeta-viaje h2 {
+    margin-top: 0;
+}
+
+.datos-viaje {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    margin: 0;
+}
+
+.datos-viaje dt {
+    font-weight: bold;
+}
+
+.datos-viaje dd {
+    margin: 0;
+}
+
+.itinerario {
+    white-space: pre-wrap;
+}
+
+.mensaje {
+    color: #a00;
+}
+
+@media (max-width: 550px) {
+    .encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .datos-viaje {
+        grid-template-columns: 1fr;
+        gap: 3px;
+    }
+}

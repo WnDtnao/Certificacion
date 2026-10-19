@@ -1,124 +1,67 @@
--- MySQL Workbench Forward Engineering
+-- Base de datos para registro de usuarios y organización de viajes.
+CREATE DATABASE IF NOT EXISTS `certificacion`
+    DEFAULT CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+USE `certificacion`;
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+-- Estas tablas pertenecían al proyecto anterior y ya no se utilizan.
+-- Se eliminan primero los comentarios porque dependían de las películas.
+DROP TABLE IF EXISTS `comentarios`;
+DROP TABLE IF EXISTS `peliculas`;
 
--- -----------------------------------------------------
--- Schema certificacion
--- -----------------------------------------------------
+-- Las cuentas se conservan; el correo es único y admite hasta 254 caracteres.
+CREATE TABLE IF NOT EXISTS `usuarios` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `nombre` VARCHAR(45) NOT NULL,
+    `apellido` VARCHAR(45) NOT NULL,
+    `email` VARCHAR(254) NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME NULL,
+    `updated_at` DATETIME NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `uq_usuarios_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Schema certificacion
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `certificacion` DEFAULT CHARACTER SET utf8 ;
-USE `certificacion` ;
+-- Actualiza instalaciones antiguas sin eliminar ni modificar las cuentas.
+ALTER TABLE `usuarios`
+    MODIFY COLUMN `email` VARCHAR(254) NULL;
 
--- -----------------------------------------------------
--- Table `certificacion`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `certificacion`.`usuarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NOT NULL,
-  `apellido` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(254) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `uq_usuarios_email` (`email` ASC))
-ENGINE = InnoDB;
+-- Cada viaje pertenece a la persona que lo organiza.
+CREATE TABLE IF NOT EXISTS `viajes` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `destino` VARCHAR(120) NOT NULL,
+    `fecha_inicio` DATE NOT NULL,
+    `fecha_fin` DATE NOT NULL,
+    `itinerario` VARCHAR(40) NOT NULL,
+    `organizador_id` INT NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_viajes_usuarios_idx` (`organizador_id`),
+    CONSTRAINT `fk_viajes_usuarios`
+        FOREIGN KEY (`organizador_id`)
+        REFERENCES `usuarios` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
--- -----------------------------------------------------
--- Table `certificacion`.`peliculas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `certificacion`.`peliculas` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre_pelicula` VARCHAR(45) NULL,
-  `director` VARCHAR(45) NULL,
-  `fecha_estreno` VARCHAR(45) NULL,
-  `sinopsis` TEXT NULL,
-  `usuario_id` INT NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_peliculas_usuarios_idx` (`usuario_id` ASC) VISIBLE,
-  CONSTRAINT `fk_peliculas_usuarios`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `certificacion`.`usuarios` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `certificacion`.`comentarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `certificacion`.`comentarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `comentario` TEXT NOT NULL,
-  `usuario_id` INT NOT NULL,
-  `pelicula_id` INT NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_comentarios_usuarios_idx` (`usuario_id` ASC) VISIBLE,
-  INDEX `fk_comentarios_peliculas1_idx` (`pelicula_id` ASC) VISIBLE,
-  CONSTRAINT `fk_comentarios_usuarios`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `certificacion`.`usuarios` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_comentarios_peliculas1`
-    FOREIGN KEY (`pelicula_id`)
-    REFERENCES `certificacion`.`peliculas` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Nuevas tablas para organizar viajes e inscribir viajeros.
--- Las tablas antiguas de películas y comentarios se conservan sin cambios.
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `certificacion`.`viajes` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `destino` VARCHAR(120) NOT NULL,
-  `fecha_inicio` DATE NOT NULL,
-  `fecha_fin` DATE NOT NULL,
-  `itinerario` VARCHAR(40) NOT NULL,
-  `organizador_id` INT NOT NULL,
-  `created_at` DATETIME NOT NULL,
-  `updated_at` DATETIME NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_viajes_usuarios_idx` (`organizador_id` ASC),
-  CONSTRAINT `fk_viajes_usuarios`
-    FOREIGN KEY (`organizador_id`)
-    REFERENCES `certificacion`.`usuarios` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS `certificacion`.`viajeros` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `viaje_id` INT NOT NULL,
-  `usuario_id` INT NOT NULL,
-  `created_at` DATETIME NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `uq_viajeros_viaje_usuario` (`viaje_id` ASC, `usuario_id` ASC),
-  INDEX `fk_viajeros_usuarios_idx` (`usuario_id` ASC),
-  CONSTRAINT `fk_viajeros_viajes`
-    FOREIGN KEY (`viaje_id`)
-    REFERENCES `certificacion`.`viajes` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_viajeros_usuarios`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `certificacion`.`usuarios` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- La tabla intermedia evita inscripciones repetidas al mismo viaje.
+CREATE TABLE IF NOT EXISTS `viajeros` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `viaje_id` INT NOT NULL,
+    `usuario_id` INT NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `uq_viajeros_viaje_usuario` (`viaje_id`, `usuario_id`),
+    INDEX `fk_viajeros_usuarios_idx` (`usuario_id`),
+    CONSTRAINT `fk_viajeros_viajes`
+        FOREIGN KEY (`viaje_id`)
+        REFERENCES `viajes` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `fk_viajeros_usuarios`
+        FOREIGN KEY (`usuario_id`)
+        REFERENCES `usuarios` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -11,7 +11,7 @@ def index():
     """Muestra en una página el formulario de registro y el de acceso."""
     if "user_id" in session:
         return redirect(url_for("dashboard"))
-    return render_template("iniciosesion.html")
+    return render_template("login.html")
 
 
 @app.route("/registro", methods=["POST"])
@@ -58,8 +58,8 @@ def login():
     return redirect(url_for("dashboard"))
 
 
-@app.route("/logout", methods=["GET", "POST"])
 @app.route("/cierre", methods=["GET", "POST"])
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
     """Elimina los datos de sesión y vuelve al formulario de acceso."""
     session.clear()

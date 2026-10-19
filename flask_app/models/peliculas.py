@@ -144,4 +144,4 @@ class Trip:
             fin = date.fromisoformat(fin_texto)
         except ValueError:
             return False
-        return inicio >= date.today() and fin >= inicio
+        return inicio >= date.today() and fin > inicio
