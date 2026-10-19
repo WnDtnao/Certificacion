@@ -9,7 +9,6 @@
 <body>
     <main class="pagina acceso">
 
-        <!-- Los mensajes proceden de las validaciones del controlador de usuarios. -->
         {% with mensajes = get_flashed_messages(with_categories=true) %}
             {% if mensajes %}
                 <div class="mensajes" role="status">
@@ -21,7 +20,6 @@
         {% endwith %}
 
         <div class="columnas">
-            <!-- Este formulario crea la cuenta y luego inicia la sesión. -->
             <section class="panel">
                 <h2>Registro</h2>
                 <form action="{{ url_for('register') }}" method="POST">
@@ -49,7 +47,6 @@
                 </form>
             </section>
 
-            <!-- El controlador compara la contraseña con el hash guardado en MySQL. -->
             <section class="panel">
                 <h2>Inicio de Sesión</h2>
                 <form action="{{ url_for('login') }}" method="POST">

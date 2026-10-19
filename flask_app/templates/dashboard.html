@@ -19,7 +19,6 @@
             </nav>
         </header>
 
-        <!-- Los avisos comunican rechazos o confirmaciones de las acciones. -->
         {% with mensajes = get_flashed_messages(with_categories=true) %}
             {% if mensajes %}
                 <div class="mensajes" role="status">
@@ -30,7 +29,6 @@
             {% endif %}
         {% endwith %}
 
-        <!-- La lista viene del modelo ordenada por fecha y sin viajes ya iniciados. -->
         {% if viajes %}
             <div class="tabla-contenedor">
                 <table>

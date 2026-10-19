@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viajero Frecuente | Nuevo Viaje</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='nuevo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='formulario.css') }}">
 </head>
 <body>
     <main class="pagina formulario-pagina">
@@ -26,7 +26,6 @@
             {% endif %}
         {% endwith %}
 
-        <!-- El controlador toma el organizador desde la sesión, no del formulario. -->
         <form class="formulario" action="{{ url_for('crear_viaje') }}" method="POST">
             <label for="destino">Destino</label>
             <input id="destino" name="destino" type="text" maxlength="120" required>

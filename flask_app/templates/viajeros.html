@@ -1,4 +1,3 @@
-<!-- Parcial del detalle: lista las inscripciones y permite gestionarlas. -->
 <section class="lista-viajeros" aria-labelledby="titulo-viajeros">
     <h3 id="titulo-viajeros">Viajeros</h3>
     {% if viajeros %}
@@ -14,12 +13,10 @@
     {% if viaje.organizador_id == session.get('user_id') %}
         <p class="nota-organizador">Este viaje está organizado por ti.</p>
     {% elif ya_inscrito %}
-        <!-- La baja solo elimina la inscripción del usuario conectado. -->
         <form action="{{ url_for('cancelar_viaje', trip_id=viaje.id) }}" method="POST">
             <button class="boton boton-secundario" type="submit">Cancelar</button>
         </form>
     {% else %}
-        <!-- La ruta verifica que el viaje siga abierto y registra al usuario actual. -->
         <form action="{{ url_for('unirme_viaje', trip_id=viaje.id) }}" method="POST">
             <button type="submit">Unirme</button>
         </form>

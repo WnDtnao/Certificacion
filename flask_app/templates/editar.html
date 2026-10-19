@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viajero Frecuente | Editar Viaje</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='editar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='formulario.css') }}">
 </head>
 <body>
     <main class="pagina formulario-pagina">
@@ -26,7 +26,6 @@
             {% endif %}
         {% endwith %}
 
-        <!-- El controlador comprueba la propiedad antes de mostrar este formulario. -->
         <form class="formulario"
               action="{{ url_for('actualizar_viaje', trip_id=viaje.id) }}"
               method="POST">

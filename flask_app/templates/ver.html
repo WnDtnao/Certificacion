@@ -27,7 +27,6 @@
             {% endif %}
         {% endwith %}
 
-        <!-- El controlador combina los datos del viaje con la lista de viajeros. -->
         <article class="tarjeta-viaje">
             <h2>{{ viaje.destino }}</h2>
             <dl class="datos-viaje">
@@ -44,7 +43,6 @@
                 <dd class="itinerario">{{ viaje.itinerario }}</dd>
             </dl>
 
-            <!-- Este parcial muestra participantes y el botón correspondiente a la sesión. -->
             {% include "viajeros.html" %}
         </article>
     </main>

@@ -1,21 +1,12 @@
-"""Acceso a datos de viajes, organizadores e inscripciones de viajeros.
-
-El nombre del archivo se conserva para no romper la estructura del proyecto
-original; las consultas ya trabajan únicamente con las tablas de viajes.
-"""
-
 from datetime import date
 
 from flask_app.config.mysqlconnection import connectToMySQL
 
 
 class Trip:
-    """Representa un viaje compartido y permite administrar sus viajeros."""
-
     db = "certificacion"
 
     def __init__(self, data):
-        """Convierte una fila SQL en atributos sencillos para las plantillas."""
         self.id = data["id"]
         self.destino = data["destino"]
         self.fecha_inicio = data["fecha_inicio"]
@@ -28,7 +19,7 @@ class Trip:
 
     @classmethod
     def get_all(cls):
-        """Lista viajes que aún no han comenzado, del más próximo al más lejano."""
+        # solo viajes que todavia no empiezan, del mas cercano al mas lejano
         query = """
             SELECT viajes.*, usuarios.nombre AS organizador
             FROM viajes
@@ -41,7 +32,6 @@ class Trip:
 
     @classmethod
     def get_by_id(cls, trip_id):
-        """Busca un viaje y añade el nombre de quien lo organizó."""
         query = """
             SELECT viajes.*, usuarios.nombre AS organizador
             FROM viajes
@@ -55,7 +45,6 @@ class Trip:
 
     @classmethod
     def save(cls, data):
-        """Guarda un viaje y devuelve el identificador generado por MySQL."""
         query = """
             INSERT INTO viajes
                 (destino, fecha_inicio, fecha_fin, itinerario, organizador_id, created_at, updated_at)
@@ -66,7 +55,6 @@ class Trip:
 
     @classmethod
     def update(cls, data):
-        """Actualiza el viaje indicado; la autorización se valida en el controlador."""
         query = """
             UPDATE viajes
             SET destino = %(destino)s,
@@ -80,13 +68,11 @@ class Trip:
 
     @classmethod
     def delete(cls, trip_id):
-        """Elimina un viaje; MySQL también elimina sus inscripciones relacionadas."""
         query = "DELETE FROM viajes WHERE id = %(id)s;"
         return connectToMySQL(cls.db).query_db(query, {"id": trip_id})
 
     @classmethod
     def get_travelers(cls, trip_id):
-        """Devuelve los nombres de las personas inscritas en el viaje."""
         query = """
             SELECT usuarios.id, usuarios.nombre, usuarios.apellido
             FROM viajeros
@@ -98,7 +84,6 @@ class Trip:
 
     @classmethod
     def is_traveler(cls, trip_id, user_id):
-        """Indica si una persona ya está inscrita, evitando inscripciones dobles."""
         query = """
             SELECT id FROM viajeros
             WHERE viaje_id = %(viaje_id)s AND usuario_id = %(usuario_id)s;
@@ -110,7 +95,6 @@ class Trip:
 
     @classmethod
     def join(cls, trip_id, user_id):
-        """Registra a una persona en la lista de viajeros del viaje."""
         query = """
             INSERT INTO viajeros (viaje_id, usuario_id, created_at)
             VALUES (%(viaje_id)s, %(usuario_id)s, NOW());
@@ -121,7 +105,6 @@ class Trip:
 
     @classmethod
     def leave(cls, trip_id, user_id):
-        """Quita únicamente la inscripción de la persona que solicita salir."""
         query = """
             DELETE FROM viajeros
             WHERE viaje_id = %(viaje_id)s AND usuario_id = %(usuario_id)s;
@@ -132,7 +115,6 @@ class Trip:
 
     @staticmethod
     def validate(data):
-        """Valida destino, fechas futuras y un itinerario de hasta 40 caracteres."""
         destino = data.get("destino", "").strip()
         itinerario = data.get("itinerario", "").strip()
         inicio_texto = data.get("fecha_inicio", "").strip()
