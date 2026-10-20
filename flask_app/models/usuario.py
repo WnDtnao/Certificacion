@@ -24,7 +24,7 @@ class Usuario:
     def get_by_email(cls, data):
         query = "SELECT * FROM usuarios WHERE email = %(email)s;"
         resultado = connectToMySQL('certificacion').query_db(query, data)
-        # si no encuentra el correo devuelve False
+        # si no encuentra el correo devuelve False y da que no se encontro
         if len(resultado) < 1:
             return False
         return cls(resultado[0])

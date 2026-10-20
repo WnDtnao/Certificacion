@@ -13,10 +13,9 @@ class Viaje:
         self.usuario_id = data['usuario_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        # nombre del que organiza, viene del JOIN
         self.organizador = data['organizador']
 
-    # solo los viajes que no han empezado, el mas cercano primero
+    # el filtro bonus que organiza los viajes por fecha de la mas actual a la mas vieja
     @classmethod
     def get_all(cls):
         query = "SELECT viajes.*, usuarios.nombre AS organizador FROM viajes JOIN usuarios ON viajes.usuario_id = usuarios.id WHERE viajes.fecha_inicio >= CURDATE() ORDER BY viajes.fecha_inicio ASC;"
@@ -48,8 +47,6 @@ class Viaje:
     def delete(cls, data):
         query = "DELETE FROM viajes WHERE id = %(id)s;"
         return connectToMySQL('certificacion').query_db(query, data)
-
-    # ---- viajeros (tabla intermedia) ----
 
     @classmethod
     def get_viajeros(cls, data):

@@ -41,8 +41,6 @@ h1 {
     font-size: 14px;
 }
 
-/* ---- login / registro ---- */
-
 .login {
     display: flex;
     justify-content: space-around;
@@ -61,7 +59,6 @@ h1 {
     text-align: center;
 }
 
-/* label a la izquierda, input a la derecha */
 .campo {
     display: flex;
     justify-content: space-between;
@@ -88,8 +85,6 @@ h1 {
     display: block;
     margin-left: auto;
 }
-
-/* ---- dashboard ---- */
 
 .encabezado {
     display: flex;
@@ -124,8 +119,6 @@ td a {
     margin-right: 4px;
 }
 
-/* ---- ver viaje ---- */
-
 .botones-arriba {
     text-align: right;
     margin-bottom: 15px;
@@ -157,7 +150,7 @@ td a {
     border: 1px solid #333;
 }
 
-/* lista de viajeros con el mismo estilo que la tabla del dashboard */
+
 .tabla-viajeros {
     width: 100%;
     margin-bottom: 10px;
@@ -167,3 +160,5 @@ td a {
 .tabla-viajeros th {
     background-color: #ddd;
 }
+
+/* como esto no usa tanto diseño, solo use una xd */
